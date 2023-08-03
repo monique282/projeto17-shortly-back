@@ -62,10 +62,10 @@ export async function registerPost(req, res) {
         // enviar os dados pro servidor pra quando o cadastro der certo
         await db.query(query, queryParams);
         return res.sendStatus(201);
+
     } catch (erro) {
         res.status(500).send(erro.message);
     }
-
 };
 
 // essa função aqui serve pra envia um poste e fazer login
@@ -90,7 +90,7 @@ export async function loginPost(req, res) {
 
         // gernado o token
         const token = uuid();
-        
+
         // enviar os dados pro servidor pra quando o cadastro der certo
         await db.query('INSERT INTO usersLogged (name,email,token) VALUES ($1, $2, $3)', [emailExistsQuery.rows[0].name, email, token]);
         return res.sendStatus(201);
