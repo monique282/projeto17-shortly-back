@@ -10,16 +10,21 @@ import { db } from '../database/database.connection.js';
 export async function registerPost(req, res) {
 
     // pegar os dados que a pessoa colocou na tela de cadastro
-    const { name, email, password } = req.body;
+    const { name, email, password, confirmPassword } = req.body;
 
     try {
+
+        // verificando se as senhas são iguais
+        if (password !== confirmPassword) {
+            return res.status(409).send({message: "Senha e Confirmar senha não são iguais."});
+        }
 
         // cripitografas a senha 
         const passwordsafe = bcrypt.hashSync(password, 2);
 
         let query = 'INSERT INTO users (name,email,password) VALUES ($1, $2, $3) ';
         const queryParams = [];
-        console.log(query, queryParams);
+
 
         // Verificando os parâmetros enviados pela query são validos
         // verificando se name é valido
@@ -39,7 +44,6 @@ export async function registerPost(req, res) {
 
         // enviar os dados pro servidor pra quando o cadastro der certo
         await db.query(query, queryParams);
-        console.log(query, queryParams);
         return res.sendStatus(201);
     } catch (erro) {
         res.status(500).send(erro.message);
