@@ -14,9 +14,19 @@ export async function registerPost(req, res) {
 
     try {
 
+        // verificando se o email ja esta cadastrado
+        const emailExistsQuery = 'SELECT * FROM users WHERE email = $1';
+        const emailExistsParams = [email];
+        const existingUser = await db.query(emailExistsQuery, emailExistsParams);
+
+        if (existingUser.rows.length > 0) {
+            return res.status(409).send({ message: "E-mail já cadastrado. Por favor, utilize outro e-mail." });
+        }
+
+
         // verificando se as senhas são iguais
         if (password !== confirmPassword) {
-            return res.status(409).send({message: "Senha e Confirmar senha não são iguais."});
+           return res.status(409).send({message: "Senha e Confirmar senha não são iguais."}); 
         }
 
         // cripitografas a senha 
@@ -30,16 +40,22 @@ export async function registerPost(req, res) {
         // verificando se name é valido
         if (typeof name !== 'undefined' && name !== '') {
             queryParams.push(name);
+        }else{
+            return res.status(422).send({message: "Formato de nome invalido."});
         };
 
         // verificando se o email é valido
         if (typeof email !== 'undefined' && email !== '') {
             queryParams.push(email);
+        }else{
+            return res.status(422).send({message: "Formato de email invalido."});
         };
 
         // verificando se a senha é valida
         if (typeof password !== 'undefined' && password !== '') {
             queryParams.push(passwordsafe);
+        }else{
+            return res.status(422).send({message: "Formato de senha invalido."});
         };
 
         // enviar os dados pro servidor pra quando o cadastro der certo
