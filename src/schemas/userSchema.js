@@ -4,5 +4,6 @@ export const registerTable = joi.object({
 
     name: joi.string().min(1).required(),
     email: joi.string().email().required(),
-    password: joi.string().required().min(3)
+    password: joi.string().required().min(3),
+    confirmPassword: joi.string().required().min(3)
 })
