@@ -3,12 +3,16 @@
 
 import { Router } from "express";
 import userRouter from "./userRoutes.js";
+import urlRouter from "./urlRoutes.js";
 
 const router = Router()
 
 router.use([
-    // rota para os cadastro
-    userRouter
+    // rota para os usuario
+    userRouter,
+
+    // rotas das urls
+    urlRouter
 ]);
 
 export default router;
