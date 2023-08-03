@@ -8,4 +8,5 @@ const urlRouter = Router();
 
 urlRouter.post("/urls/shorten", validateJoiForAll(urlSentByUser), urlsPost);
 
+
 export default urlRouter;
