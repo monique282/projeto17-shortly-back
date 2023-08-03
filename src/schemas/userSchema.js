@@ -9,8 +9,7 @@ export const registerTable = joi.object({
 });
 
 export const loginTable = joi.object({
-    
+
     email: joi.string().email().required(),
     password: joi.string().required().min(3)
-    
-})
+});
