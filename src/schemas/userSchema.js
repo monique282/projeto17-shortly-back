@@ -13,3 +13,8 @@ export const loginTable = joi.object({
     email: joi.string().email().required(),
     password: joi.string().required().min(3)
 });
+
+export const urlSentByUser = joi.object({
+
+    url : joi.string().required()
+});
