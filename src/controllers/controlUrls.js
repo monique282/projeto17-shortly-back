@@ -41,6 +41,11 @@ export async function urlsGet(req, res) {
     const { id } = req.params;
     try {
 
+        // pegando a url peli id indicado
+        const ulrs = await db.query('SELECT * FROM urls WHERE id = $1;', [id]);
+
+        
+
     } catch (erro) {
         res.status(500).send(erro.message);
     }
