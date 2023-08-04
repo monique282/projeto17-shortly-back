@@ -45,12 +45,15 @@ export async function urlsGet(req, res) {
     try {
 
         // pegando a url peli id indicado
-        const ulrs = await db.query('SELECT * FROM urls WHERE id = $1;', [id]);
+        const urls = await db.query('SELECT * FROM urls WHERE id = $1;', [id]);
 
         // verificando se a ulr é valida
-        if(ulrs.rows.length === 0){
-        return res.status(404).send(" Url não valida");
+        if (urls.rows.length === 0) {
+            return res.status(404).send("Url não valida");
         };
+
+        // se tudo der certo
+        res.status(200).send({"id": urls.rows[0].id, "shortUrl":urls.rows[0].shortUrl, "url": urls.rows[0].url})
 
     } catch (erro) {
         res.status(500).send(erro.message);
