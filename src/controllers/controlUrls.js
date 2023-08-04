@@ -26,21 +26,22 @@ export async function urlsPost(req, res) {
         const visitCount = 0
 
         // enviando os dados para o servidor
-        await db.query('INSERT INTO urls (shortUrl,url,visitCount,Iduser) VALUES ($1, $2, $3)', [shortUrl, url, userLogeed.rows[0].id, visitCount ]);
+        await db.query('INSERT INTO urls (shortUrl,url,visitCount,Iduser) VALUES ($1, $2, $3)', [shortUrl, url, userLogeed.rows[0].id, visitCount]);
 
         // pegando o id
         const idUrls = await db.query('SELECT * FROM urls WHERE shortUrl = $1;', [shortUrl]);
         return res.status(201).send({ "id": idUrls.rows[0].id, "shortUrl": shortUrl });
 
-        // shortUrl TEXT NOT NULL,
-        // url TEXT NOT NULL,
-        // visitCount INTEGER NOT NULL,
-        // Iduser INTEGER 
+    } catch (erro) {
+        res.status(500).send(erro.message);
+    };
+}
+
+export async function urlsGet(req, res) {
+    const { id } = req.params;
+    try {
 
     } catch (erro) {
         res.status(500).send(erro.message);
     }
-
-
-
 }
