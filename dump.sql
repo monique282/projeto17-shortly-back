@@ -21,10 +21,10 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: shortUser; Type: TABLE; Schema: public; Owner: -
+-- Name: shortuser; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public."shortUser" (
+CREATE TABLE public.shortuser (
     "userId" integer NOT NULL,
     "shortId" integer NOT NULL,
     "createdAt" timestamp without time zone DEFAULT now()
@@ -37,9 +37,9 @@ CREATE TABLE public."shortUser" (
 
 CREATE TABLE public.urls (
     id integer NOT NULL,
-    shorturl text NOT NULL,
+    "shortUrl" text NOT NULL,
     url text NOT NULL,
-    visitcount integer DEFAULT 0 NOT NULL,
+    "visitCount" integer DEFAULT 0 NOT NULL,
     "createdAt" timestamp without time zone DEFAULT now()
 );
 
@@ -152,7 +152,7 @@ ALTER TABLE ONLY public.userslogged ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
--- Data for Name: shortUser; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: shortuser; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 
@@ -167,7 +167,6 @@ ALTER TABLE ONLY public.userslogged ALTER COLUMN id SET DEFAULT nextval('public.
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.users VALUES (1, '1', 'm1@m.com', '$2b$04$Or7BFkmWCxX5Q8W.6gJBEOsWN6KKhsd2Y/vRlZU5Ot0IQPiJ7UAwe', '2023-08-04 17:34:41.540027');
 
 
 --
@@ -187,7 +186,7 @@ SELECT pg_catalog.setval('public.urls_id_seq', 1, false);
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 1, true);
+SELECT pg_catalog.setval('public.users_id_seq', 1, false);
 
 
 --
@@ -206,11 +205,11 @@ ALTER TABLE ONLY public.urls
 
 
 --
--- Name: urls urls_shorturl_key; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: urls urls_shortUrl_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.urls
-    ADD CONSTRAINT urls_shorturl_key UNIQUE (shorturl);
+    ADD CONSTRAINT "urls_shortUrl_key" UNIQUE ("shortUrl");
 
 
 --
@@ -246,19 +245,27 @@ ALTER TABLE ONLY public.userslogged
 
 
 --
--- Name: shortUser shortUser_shortId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: shortuser shortuser_shortId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public."shortUser"
-    ADD CONSTRAINT "shortUser_shortId_fkey" FOREIGN KEY ("shortId") REFERENCES public.urls(id);
+ALTER TABLE ONLY public.shortuser
+    ADD CONSTRAINT "shortuser_shortId_fkey" FOREIGN KEY ("shortId") REFERENCES public.urls(id);
 
 
 --
--- Name: shortUser shortUser_userId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: shortuser shortuser_userId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public."shortUser"
-    ADD CONSTRAINT "shortUser_userId_fkey" FOREIGN KEY ("userId") REFERENCES public.users(id);
+ALTER TABLE ONLY public.shortuser
+    ADD CONSTRAINT "shortuser_userId_fkey" FOREIGN KEY ("userId") REFERENCES public.users(id);
+
+
+--
+-- Name: userslogged userslogged_email_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.userslogged
+    ADD CONSTRAINT userslogged_email_fkey FOREIGN KEY (email) REFERENCES public.users(email);
 
 
 --
