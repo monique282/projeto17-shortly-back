@@ -13,7 +13,7 @@ export async function urlsPost(req, res) {
     try {
 
         // validando o token
-        const userLogeed = await db.query('SELECT * FROM usersLogged WHERE token = $1;', [token]);
+        const userLogeed = await db.query('SELECT * FROM userslogged WHERE token = $1;', [token]);
         if (userLogeed.rows.length === 0) {
             return res.status(401).send({ message: "Usuário não autorizado." });
         };
@@ -76,7 +76,7 @@ export async function urlsOpenGet(req, res) {
         // atualizando visitCount
         await db.query(`UPDATE urls SET "visitCount" = $1 WHERE "shortUrl" = $2`, [shortForUrl.rows[0].visitCount + 1, shortUrl])
         res.redirect(`/urls/open/${short.rows[0].url}`);
-        
+
     } catch (erro) {
         res.status(500).send(erro.message);
     };
