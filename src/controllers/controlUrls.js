@@ -27,13 +27,13 @@ export async function urlsPost(req, res) {
         const shortUrl = nanoid(8);
 
         // enviando os dados para o servidor
-        await db.query('INSERT INTO urls (shortUrl,url) VALUES ($1, $2)', [shortUrl, url]);
+        await db.query('INSERT INTO urls ("shortUrl",url) VALUES ($1, $2)', [shortUrl, url]);
 
         // quero o id da tabela de urls 
-        const idUrls = await db.query('SELECT * FROM urls WHERE shortUrl = $1;', [shortUrl]);
+        const idUrls = await db.query('SELECT * FROM urls WHERE "shortUrl" = $1;', [shortUrl]);
 
         // salvar na tabela de shortUser o id do user e do urls
-        await db.query('INSERT INTO "shortUser" ( "userId" ,"shortId") VALUES ($1, $2)', [idUser.rows[0].id, idUrls.rows[0].id]);
+        await db.query('INSERT INTO shortuser ( "userId" ,"shortId") VALUES ($1, $2)', [idUser.rows[0].id, idUrls.rows[0].id]);
 
         return res.status(201).send({ "id": idUrls.rows[0].id, "shortUrl": shortUrl });
 
