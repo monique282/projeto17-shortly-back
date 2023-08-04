@@ -21,6 +21,17 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: shortUser; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public."shortUser" (
+    "userId" integer NOT NULL,
+    "shortId" integer NOT NULL,
+    "createdAt" timestamp without time zone DEFAULT now()
+);
+
+
+--
 -- Name: urls; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -28,7 +39,7 @@ CREATE TABLE public.urls (
     id integer NOT NULL,
     shorturl text NOT NULL,
     url text NOT NULL,
-    visitcount integer NOT NULL,
+    visitcount integer DEFAULT 0 NOT NULL,
     "createdAt" timestamp without time zone DEFAULT now()
 );
 
@@ -141,6 +152,12 @@ ALTER TABLE ONLY public.userslogged ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
+-- Data for Name: shortUser; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+
+
+--
 -- Data for Name: urls; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -150,6 +167,7 @@ ALTER TABLE ONLY public.userslogged ALTER COLUMN id SET DEFAULT nextval('public.
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: -
 --
 
+INSERT INTO public.users VALUES (1, '1', 'm1@m.com', '$2b$04$Or7BFkmWCxX5Q8W.6gJBEOsWN6KKhsd2Y/vRlZU5Ot0IQPiJ7UAwe', '2023-08-04 17:34:41.540027');
 
 
 --
@@ -169,7 +187,7 @@ SELECT pg_catalog.setval('public.urls_id_seq', 1, false);
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 1, false);
+SELECT pg_catalog.setval('public.users_id_seq', 1, true);
 
 
 --
@@ -225,6 +243,22 @@ ALTER TABLE ONLY public.userslogged
 
 ALTER TABLE ONLY public.userslogged
     ADD CONSTRAINT userslogged_token_key UNIQUE (token);
+
+
+--
+-- Name: shortUser shortUser_shortId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."shortUser"
+    ADD CONSTRAINT "shortUser_shortId_fkey" FOREIGN KEY ("shortId") REFERENCES public.urls(id);
+
+
+--
+-- Name: shortUser shortUser_userId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."shortUser"
+    ADD CONSTRAINT "shortUser_userId_fkey" FOREIGN KEY ("userId") REFERENCES public.users(id);
 
 
 --
