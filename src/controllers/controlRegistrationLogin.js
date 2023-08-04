@@ -79,7 +79,7 @@ export async function loginPost(req, res) {
         // verificando se o email ja esta cadastrado
         const emailExistsQuery = await db.query('SELECT * FROM users WHERE email = $1;', [email]);
         if (emailExistsQuery.rows.length === 0) {
-            return res.status(409).send({ message: "E-mail não cadastrado. Por favor, utilize um e-mail valido, ou faça o cadastro." });
+            return res.status(401).send({ message: "E-mail não cadastrado. Por favor, utilize um e-mail valido, ou faça o cadastro." });
         }
 
         // vericiar se a senha esta correta
