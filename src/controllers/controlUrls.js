@@ -53,7 +53,7 @@ export async function urlsGet(req, res) {
         };
 
         // se tudo der certo
-        res.status(200).send({"id": urls.rows[0].id, "shortUrl":urls.rows[0].shortUrl, "url": urls.rows[0].url})
+        res.status(200).send({ "id": urls.rows[0].id, "shortUrl": urls.rows[0].shortUrl, "url": urls.rows[0].url })
 
     } catch (erro) {
         res.status(500).send(erro.message);
@@ -61,20 +61,22 @@ export async function urlsGet(req, res) {
 }
 
 export async function urlsOpenGet(req, res) {
-    const { id } = req.params;
+    const { shortUrl } = req.params;
     try {
 
-        // pegando a url peli id indicado
-        const urls = await db.query('SELECT * FROM urls WHERE id = $1;', [id]);
+        // verificando se o short existe 
+        const shortForUrl = await db.query('SELECT * FROM urls WHERE "shortUrl" = $1;', [shortUrl]);
 
-        // verificando se a ulr é valida
-        if (urls.rows.length === 0) {
-            return res.status(404).send("Url não valida");
+        // verificando se a short é valida
+        if (shor.rows.length === 0) {
+            return res.status(404).send("Url não encontrada");
         };
 
         // se tudo der certo
-        res.status(200).send({"id": urls.rows[0].id, "shortUrl":urls.rows[0].shortUrl, "url": urls.rows[0].url})
-
+        // atualizando visitCount
+        await db.query(`UPDATE urls SET "visitCount" = $1 WHERE "shortUrl" = $2`, [shortForUrl.rows[0].visitCount + 1, shortUrl])
+        res.redirect(`/urls/open/${short.rows[0].url}`);
+        
     } catch (erro) {
         res.status(500).send(erro.message);
     };
