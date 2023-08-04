@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { urlSentByUser } from "../schemas/urlSchema.js";
-import { urlsPost } from "../controllers/controlUrls.js";
+import { urlsGet, urlsPost } from "../controllers/controlUrls.js";
 import { validateJoiForAll } from "../middlewares/validateSchema.js";
 
 
