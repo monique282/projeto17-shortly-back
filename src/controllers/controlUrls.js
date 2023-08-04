@@ -47,9 +47,12 @@ export async function urlsGet(req, res) {
         // pegando a url peli id indicado
         const ulrs = await db.query('SELECT * FROM urls WHERE id = $1;', [id]);
 
-
+        // verificando se a ulr é valida
+        if(ulrs.rows.length === 0){
+        return res.status(404).send(" Url não valida");
+        };
 
     } catch (erro) {
         res.status(500).send(erro.message);
-    }
+    };
 }
