@@ -7,6 +7,6 @@ import { validateJoiForAll } from "../middlewares/validateSchema.js";
 const urlRouter = Router();
 
 urlRouter.post("/urls/shorten", validateJoiForAll(urlSentByUser), urlsPost);
-
+urlRouter.get("/urls/:id", urlsGet);
 
 export default urlRouter;
