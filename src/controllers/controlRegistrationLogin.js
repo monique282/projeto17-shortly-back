@@ -93,7 +93,7 @@ export async function loginPost(req, res) {
 
         // enviar os dados pro servidor pra quando o cadastro der certo
         await db.query('INSERT INTO usersLogged (name,email,token) VALUES ($1, $2, $3)', [emailExistsQuery.rows[0].name, email, token]);
-        return res.sendStatus(201);
+        return res.sendStatus(200);
 
     } catch (erro) {
         res.status(500).send(erro.message);
