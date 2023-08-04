@@ -89,16 +89,31 @@ export async function urlsOpenGet(req, res) {
 // função que deleta pelo id urls/:id
 export async function urlsDelete(req, res) {
 
+    // pegando os dados do token
+    const { authorization } = req.headers;
+    const token = authorization?.replace("Bearer ", "")
+
+    // pegando o id 
     const { id } = req.params;
     try {
 
-        // pegando a url peli id indicado
-        const urls = await db.query('SELECT * FROM urls WHERE id = $1;', [id]);
-
-        // verificando se a ulr é valida
-        if (urls.rows.length === 0) {
-            return res.status(404).send("Url não valida");
+        // validando o token
+        const userLogeed = await db.query('SELECT * FROM userslogged WHERE token = $1;', [token]);
+        if (userLogeed.rows.length === 0) {
+            return res.status(401).send({ message: "Usuário não autorizado." });
         };
+
+        // verificando de o id existe
+        // pegando a url peli id indicado
+        const users = await db.query('SELECT * FROM users WHERE id = $1;', [id]);
+
+        // verificando se a userslogged é valida
+        if (users.rows.length === 0) {
+            return res.status(404).send("Url não existe");
+        };
+
+        // pegando o usuario que é o mesmo que o usuario logado usando o email como parametro
+        const user = await db.query(`SELECT * FROM users WHERE email = $1;`, [userLogeed.rows[0].email]);
 
         // se tudo der certo
         res.status(200).send({ "id": urls.rows[0].id, "shortUrl": urls.rows[0].shortUrl, "url": urls.rows[0].url })
