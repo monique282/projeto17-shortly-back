@@ -1,6 +1,8 @@
 import { nanoid } from 'nanoid';
 import { db } from '../database/database.connection.js';
 
+
+// função que para cadastrar uma url a encurtando, urls/short
 export async function urlsPost(req, res) {
 
     // pegando os dados do token
@@ -40,6 +42,7 @@ export async function urlsPost(req, res) {
     };
 }
 
+// função que pega a url pelo id urls/:id
 export async function urlsGet(req, res) {
     const { id } = req.params;
     try {
@@ -60,6 +63,7 @@ export async function urlsGet(req, res) {
     };
 }
 
+// função que direciona pra uels espcifica urls/open/:shortUrl
 export async function urlsOpenGet(req, res) {
     const { shortUrl } = req.params;
     try {
@@ -76,6 +80,27 @@ export async function urlsOpenGet(req, res) {
         // atualizando visitCount
         await db.query(`UPDATE urls SET "visitCount" = $1 WHERE "shortUrl" = $2`, [shortForUrl.rows[0].visitCount + 1, shortUrl])
         res.redirect(`/urls/open/${short.rows[0].url}`);
+
+    } catch (erro) {
+        res.status(500).send(erro.message);
+    };
+}
+
+// função que deleta pelo id urls/:id
+export async function urlsDelete(req, res) {
+    const { id } = req.params;
+    try {
+
+        // pegando a url peli id indicado
+        const urls = await db.query('SELECT * FROM urls WHERE id = $1;', [id]);
+
+        // verificando se a ulr é valida
+        if (urls.rows.length === 0) {
+            return res.status(404).send("Url não valida");
+        };
+
+        // se tudo der certo
+        res.status(200).send({ "id": urls.rows[0].id, "shortUrl": urls.rows[0].shortUrl, "url": urls.rows[0].url })
 
     } catch (erro) {
         res.status(500).send(erro.message);

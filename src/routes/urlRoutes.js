@@ -10,4 +10,6 @@ urlRouter.post("/urls/shorten", validateJoiForAll(urlSentByUser), urlsPost);
 urlRouter.get("/urls/:id", urlsGet);
 urlRouter.get("/urls/open/:shortUrl", urlsOpenGet);
 
+
+
 export default urlRouter;
