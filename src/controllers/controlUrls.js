@@ -63,7 +63,7 @@ export async function urlsGet(req, res) {
     };
 }
 
-// função que direciona pra uels espcifica urls/open/:shortUrl
+// função que direciona pra urls espcifica urls/open/:shortUrl
 export async function urlsOpenGet(req, res) {
     const { shortUrl } = req.params;
     try {
@@ -72,14 +72,14 @@ export async function urlsOpenGet(req, res) {
         const shortForUrl = await db.query('SELECT * FROM urls WHERE "shortUrl" = $1;', [shortUrl]);
 
         // verificando se a short é valida
-        if (shor.rows.length === 0) {
+        if (shortForUrl.rows.length === 0) {
             return res.status(404).send("Url não encontrada");
         };
 
         // se tudo der certo
         // atualizando visitCount
         await db.query(`UPDATE urls SET "visitCount" = $1 WHERE "shortUrl" = $2`, [shortForUrl.rows[0].visitCount + 1, shortUrl])
-        res.redirect(`/urls/open/${short.rows[0].url}`);
+        res.redirect(`/urls/open/${shortForUrl.rows[0].url}`);
 
     } catch (erro) {
         res.status(500).send(erro.message);
@@ -88,6 +88,7 @@ export async function urlsOpenGet(req, res) {
 
 // função que deleta pelo id urls/:id
 export async function urlsDelete(req, res) {
+
     const { id } = req.params;
     try {
 
