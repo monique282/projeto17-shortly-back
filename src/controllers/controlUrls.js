@@ -8,7 +8,7 @@ export async function urlsPost(req, res) {
     const token = authorization?.replace("Bearer ", "");
 
     // pegando os dados enviado pelo usuario pelo input
-    const { url } = req.bady;
+    const { url } = req.body;
 
     try {
 
