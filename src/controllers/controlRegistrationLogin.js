@@ -27,7 +27,7 @@ export async function registerPost(req, res) {
 
         // verificando se as senhas são iguais
         if (password !== confirmPassword) {
-            return res.status(409).send({ message: "Senha e Confirmar senha não são iguais." });
+            return res.status(422).send({ message: "Senha e Confirmar senha não são iguais." });
         }
 
         // cripitografas a senha 
