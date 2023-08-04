@@ -23,10 +23,10 @@ export async function urlsPost(req, res) {
         const shortUrl = nanoid(8);
 
         // contando quantas vezes foi visitdo
-        const visitCount = 0
+        const visitCount = 0;
 
         // enviando os dados para o servidor
-        await db.query('INSERT INTO urls (shortUrl,url,visitCount,Iduser) VALUES ($1, $2, $3)', [shortUrl, url, userLogeed.rows[0].id, visitCount]);
+        await db.query('INSERT INTO urls (shortUrl,url,visitCount,Iduser) VALUES ($1, $2, $3)', [shortUrl, url, visitCount, userLogeed.rows[0].id]);
 
         // pegando o id
         const idUrls = await db.query('SELECT * FROM urls WHERE shortUrl = $1;', [shortUrl]);
