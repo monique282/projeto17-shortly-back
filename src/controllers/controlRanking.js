@@ -15,29 +15,19 @@ export async function rankingGet(req, res) {
                 SELECT
                 users.id, users.name,
                 CAST(COUNT(shortsuser."userId") AS INTEGER) AS "linksCount",
-                CAST(SUM(urls."visitCount") AS INTEGER) AS "",
-                json_agg(json_build_object(
-                    'id', urls.id,
-                    'shortUrl', urls."shortUrl",
-                    'url', urls.url,
-                    'visitCount', urls."visitCount"
-                )) AS "shortenedUrls"
-                FROM userslogged
-                LEFT JOIN urls ON userslogged.id = urls.id
-                WHERE userslogged.token = $1
-                GROUP BY userslogged.id;
-            `, [token]);
+                CAST(SUM(urls."visitCount") AS INTEGER) AS "visitCount"
+                FROM users
+                JOIN shorts ON users.id = shorts."userId"
+                JOIN urls ON urls.id = shorts."shortsId"
+                WHERE users.id = Shorts."userId"
+                GRUP BY user.id
+                ORDER BY "visitCount" DESC
+                LIMIT 10
+            ;`);
 
         // retornar os dados do usuário no formato especificado
-        const { id, name, visitcount, shortenedurls } = userData.rows[0];
-        const response = {
-            id: id,
-            name: name,
-            visitCount: visitcount,
-            shortenedUrls: shortenedurls,
-        };
 
-        return res.status(200).send(userData.rows[0]);
+        return res.status(200).send(ranking.rows);
 
     } catch (error) {
         res.status(500).send(error.message);
