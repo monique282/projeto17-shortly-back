@@ -6,7 +6,7 @@ import { loginPost, registerPost, userMeGet } from "../controllers/controlUsers.
 const userRouter = Router();
 
 userRouter.post("/signup", validateJoiForAll(registerTable), registerPost);
-userRouter.post("/signin", validateJoiForAll(loginTable), userMeGet);
-userRouter.get("/users/me", loginPost);
+userRouter.post("/signin", validateJoiForAll(loginTable), loginPost);
+userRouter.get("/users/me", userMeGet);
 
 export default userRouter;

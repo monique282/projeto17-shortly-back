@@ -116,7 +116,7 @@ export async function userMeGet(req, res) {
             return res.status(401).send({ message: "Usuário não autorizado." });
         };
 
-        
+        const body = await db.query(`SELECT `)
         return res.status(200).send();
 
     } catch (erro) {
