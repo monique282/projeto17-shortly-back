@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { rankingGet } from "../controllers/controlRanking";
 
 
 const rankingRouter = Router();
