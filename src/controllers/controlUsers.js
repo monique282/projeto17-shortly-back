@@ -99,3 +99,8 @@ export async function loginPost(req, res) {
         res.status(500).send(erro.message);
     }
 };
+
+
+
+
+
