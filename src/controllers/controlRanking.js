@@ -10,13 +10,12 @@ export async function rankingGet(req, res) {
 
     try {
         
-
         // pegando os dados do usuário e suas urls somando o total de visitas e juntando tudo
-        const userData = await db.query(`
+        const ranking = await db.query(`
                 SELECT
-                userslogged.id AS id,
-                userslogged.name,
-                CAST(SUM(urls."visitCount") AS INTEGER) AS visitCount,
+                users.id, users.name,
+                CAST(COUNT(shortsuser."userId") AS INTEGER) AS "linksCount",
+                CAST(SUM(urls."visitCount") AS INTEGER) AS "",
                 json_agg(json_build_object(
                     'id', urls.id,
                     'shortUrl', urls."shortUrl",

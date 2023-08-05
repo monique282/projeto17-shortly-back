@@ -141,7 +141,7 @@ export async function userMeGet(req, res) {
         //     shortenedUrls: shortenedurls,
         // };
 
-        return res.status(200).send(userData.rows);
+        return res.status(200).send(userData.rows[0]);
 
     } catch (error) {
         res.status(500).send(error.message);
