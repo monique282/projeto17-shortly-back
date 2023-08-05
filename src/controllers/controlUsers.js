@@ -102,25 +102,53 @@ export async function loginPost(req, res) {
 
 // essa função aqui serve pra pegar as postagem que foi o usuario que fez users/me
 export async function userMeGet(req, res) {
-
-    // pegando os dados do token
+    // Pegando os dados do token
     const { authorization } = req.headers;
     const token = authorization?.replace("Bearer ", "");
 
-
     try {
-
-        // validando o token
-        const userLogeed = await db.query('SELECT * FROM userslogged WHERE token = $1;', [token]);
-        if (userLogeed.rows.length === 0) {
+        // Validando o token
+        const userLogged = await db.query('SELECT * FROM userslogged WHERE token = $1;', [token]);
+        if (userLogged.rows.length === 0) {
             return res.status(401).send({ message: "Usuário não autorizado." });
         };
 
-        const body = await db.query(`SELECT `)
-        return res.status(200).send();
+        // Buscando os dados do usuário e suas URLs encurtadas com a contagem total de visitas
+        const userData = await db.query(`
+                SELECT
+                userslogged.id AS user_id,
+                userslogged.name,
+                SUM(urls."visitCount") AS visitCount,
+                json_agg(json_build_object(
+                    'id', urls.id,
+                    "shortUrl", urls."shortUrl",
+                    'url', urls.url,
+                    "visitCount", urls."visitCount"
+                )) AS "shortenedUrls"
+                FROM userslogged
+                LEFT JOIN urls ON userslogged.id = urls.id
+                WHERE userslogged.token = $1
+                GROUP BY userslogged.id;
+            `, [token]);
 
-    } catch (erro) {
-        res.status(500).send(erro.message);
+        // Verificar se o usuário foi encontrado
+        if (userData.rows.length === 0) {
+            return res.status(404).send({ message: "Usuário não encontrado." });
+        }
+
+        // Retornar os dados do usuário no formato especificado
+        const { user_id, name, visit_count, shortenedurls } = userData.rows[0];
+        const response = {
+            id: user_id,
+            name: name,
+            visitCount: visit_count,
+            shortenedUrls: shortenedurls
+        };
+
+        return res.status(200).send(response);
+
+    } catch (error) {
+        res.status(500).send(error.message);
     }
 };
 
