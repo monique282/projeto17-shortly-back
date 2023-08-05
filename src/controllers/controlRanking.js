@@ -20,7 +20,7 @@ export async function rankingGet(req, res) {
                 JOIN shorts ON users.id = shorts."userId"
                 JOIN urls ON urls.id = shorts."shortsId"
                 WHERE users.id = Shorts."userId"
-                GRUP BY user.id
+                GROUP BY user.id
                 ORDER BY "visitCount" DESC
                 LIMIT 10
             ;`);
