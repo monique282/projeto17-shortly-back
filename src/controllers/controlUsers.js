@@ -24,7 +24,6 @@ export async function registerPost(req, res) {
             return res.status(409).send({ message: "E-mail já cadastrado. Por favor, utilize outro e-mail." });
         }
 
-
         // verificando se as senhas são iguais
         if (password !== confirmPassword) {
             return res.status(422).send({ message: "Senha e Confirmar senha não são iguais." });
@@ -35,7 +34,6 @@ export async function registerPost(req, res) {
 
         let query = 'INSERT INTO users (name,email,password) VALUES ($1, $2, $3) ';
         const queryParams = [];
-
 
         // Verificando os parâmetros enviados pela query são validos
         // verificando se name é valido
@@ -65,7 +63,7 @@ export async function registerPost(req, res) {
 
     } catch (erro) {
         res.status(500).send(erro.message);
-    }
+    };
 };
 
 // essa função aqui serve pra envia um poste e fazer login
@@ -97,7 +95,7 @@ export async function loginPost(req, res) {
 
     } catch (erro) {
         res.status(500).send(erro.message);
-    }
+    };
 };
 
 // essa função aqui serve pra pegar as postagem que foi o usuario que fez users/me
@@ -133,20 +131,12 @@ export async function userMeGet(req, res) {
                 GROUP BY users.id, users.name;
             `, [userLogged.rows[0].email]);
 
-        // retornar os dados do usuário no formato especificado
-        // const { id, name, visitcount, shortenedurls } = userData.rows[0];
-        // const response = {
-        //     id: id,
-        //     name: name,
-        //     visitCount: visitcount,
-        //     shortenedUrls: shortenedurls,
-        // };
-
+        // se de tudo certo
         return res.status(200).send(userData.rows[0]);
 
     } catch (error) {
         res.status(500).send(error.message);
-    }
+    };
 };
 
 
