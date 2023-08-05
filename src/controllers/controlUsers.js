@@ -133,13 +133,13 @@ export async function userMeGet(req, res) {
             `, [token]);
 
         // retornar os dados do usuário no formato especificado
-        const { id, name, visitcount, shortenedurls } = userData.rows[0];
-        const response = {
-            id: id,
-            name: name,
-            visitCount: visitcount,
-            shortenedUrls: shortenedurls,
-        };
+        // const { id, name, visitcount, shortenedurls } = userData.rows[0];
+        // const response = {
+        //     id: id,
+        //     name: name,
+        //     visitCount: visitcount,
+        //     shortenedUrls: shortenedurls,
+        // };
 
         return res.status(200).send(userData.rows[0]);
 
