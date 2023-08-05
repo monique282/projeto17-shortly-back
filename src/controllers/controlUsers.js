@@ -116,7 +116,7 @@ export async function userMeGet(req, res) {
         // Buscando os dados do usuário e suas URLs encurtadas com a contagem total de visitas
         const userData = await db.query(`
                 SELECT
-                userslogged.id AS user_id,
+                userslogged.id AS id,
                 userslogged.name,
                 SUM(urls."visitCount") AS visitCount,
                 json_agg(json_build_object(
@@ -131,18 +131,19 @@ export async function userMeGet(req, res) {
                 GROUP BY userslogged.id;
             `, [token]);
 
+            console.log(userData.rows)
         // Verificar se o usuário foi encontrado
         if (userData.rows.length === 0) {
             return res.status(404).send({ message: "Usuário não encontrado." });
         }
 
         // Retornar os dados do usuário no formato especificado
-        const { user_id, name, visit_count, shortenedurls } = userData.rows[0];
+        const { id, name, visitcount, shortenedurls } = userData.rows[0];
         const response = {
-            id: user_id,
+            id: id,
             name: name,
-            visitCount: visit_count,
-            shortenedUrls: shortenedurls
+            visitCount: visitcount,
+            shortenedUrls: shortenedurls,
         };
 
         return res.status(200).send(response);
