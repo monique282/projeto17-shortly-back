@@ -118,12 +118,12 @@ export async function userMeGet(req, res) {
                 SELECT
                 userslogged.id AS id,
                 userslogged.name,
-                SUM(urls."visitCount") AS visitCount,
+                CAST(SUM(urls."visitCount") AS INTEGER) AS visitCount,
                 json_agg(json_build_object(
                     'id', urls.id,
-                    "shortUrl", urls."shortUrl",
+                    'shortUrl', urls."shortUrl",
                     'url', urls.url,
-                    "visitCount", urls."visitCount"
+                    'visitCount', urls."visitCount"
                 )) AS "shortenedUrls"
                 FROM userslogged
                 LEFT JOIN urls ON userslogged.id = urls.id
@@ -131,7 +131,7 @@ export async function userMeGet(req, res) {
                 GROUP BY userslogged.id;
             `, [token]);
 
-            console.log(userData.rows)
+        console.log(userData.rows)
         // Verificar se o usuário foi encontrado
         if (userData.rows.length === 0) {
             return res.status(404).send({ message: "Usuário não encontrado." });
@@ -146,7 +146,7 @@ export async function userMeGet(req, res) {
             shortenedUrls: shortenedurls,
         };
 
-        return res.status(200).send(response);
+        return res.status(200).send(userData.rows);
 
     } catch (error) {
         res.status(500).send(error.message);
