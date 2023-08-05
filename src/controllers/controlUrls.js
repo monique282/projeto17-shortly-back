@@ -115,8 +115,20 @@ export async function urlsDelete(req, res) {
         // pegando o usuario que é o mesmo que o usuario logado usando o email como parametro
         const user = await db.query(`SELECT * FROM users WHERE email = $1;`, [userLogeed.rows[0].email]);
 
+        // verificando se a pessoa que quer apagar é a dona do link
+        const shortUrl = await db.query(`SELECT * FROM users WHERE "userId" = $1 AND "shortId" = $2;`, [user.rows[0].id, id]);
+
+        // se não for
+        if (shortUrl.rows.length === 0) {
+            return res.status(401).send(" Não há autorização para deletar");
+        }
+
+        // fazendo a requisição para deletar a urls 
+        await db.query(`DELETE FROM shortuser WHERE "shortId" = $1;`, [id]);
+        await db.query(`DELETE FROM urls WHERE id = $1;`, [id]);
+
         // se tudo der certo
-        res.status(200).send({ "id": urls.rows[0].id, "shortUrl": urls.rows[0].shortUrl, "url": urls.rows[0].url })
+        res.sendStatus(204);
 
     } catch (erro) {
         res.status(500).send(erro.message);
