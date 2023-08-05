@@ -4,6 +4,7 @@
 import { Router } from "express";
 import userRouter from "./userRoutes.js";
 import urlRouter from "./urlRoutes.js";
+import rankingRouter from "./rankingRoutes.js";
 
 const router = Router()
 
@@ -12,7 +13,10 @@ router.use([
     userRouter,
 
     // rotas das urls
-    urlRouter
+    urlRouter,
+
+    // tora de ranking
+    rankingRouter
 ]);
 
 export default router;
