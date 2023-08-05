@@ -103,9 +103,18 @@ export async function loginPost(req, res) {
 // essa função aqui serve pra pegar as postagem que foi o usuario que fez users/me
 export async function userMeGet(req, res) {
 
-    
+    // pegando os dados do token
+    const { authorization } = req.headers;
+    const token = authorization?.replace("Bearer ", "");
+
 
     try {
+
+        // validando o token
+        const userLogeed = await db.query('SELECT * FROM userslogged WHERE token = $1;', [token]);
+        if (userLogeed.rows.length === 0) {
+            return res.status(401).send({ message: "Usuário não autorizado." });
+        };
 
         
         return res.status(200).send();
