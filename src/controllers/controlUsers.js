@@ -117,20 +117,21 @@ export async function userMeGet(req, res) {
         // pegando os dados do usuário e suas urls somando o total de visitas e juntando tudo
         const userData = await db.query(`
                 SELECT
-                userslogged.id AS id,
-                userslogged.name,
-                CAST(SUM(urls."visitCount") AS INTEGER) AS visitCount,
+                users.id AS id,
+                users.name As name,
+                CAST(SUM(urls."visitCount") AS INTEGER) AS "visitCount",
                 json_agg(json_build_object(
                     'id', urls.id,
                     'shortUrl', urls."shortUrl",
                     'url', urls.url,
                     'visitCount', urls."visitCount"
                 )) AS "shortenedUrls"
-                FROM userslogged
-                LEFT JOIN urls ON userslogged.id = urls.id
-                WHERE userslogged.token = $1
-                GROUP BY userslogged.id;
-            `, [token]);
+                FROM users
+                JOIN shortuser ON shortuser."userId" = users.id
+                JOIN urls ON shortuser."shortId" = urls.id
+                WHERE users.email = $1
+                GROUP BY users.id, users.name;
+            `, [userLogged.rows[0].email]);
 
         // retornar os dados do usuário no formato especificado
         // const { id, name, visitcount, shortenedurls } = userData.rows[0];
