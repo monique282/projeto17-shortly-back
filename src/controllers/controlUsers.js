@@ -93,14 +93,27 @@ export async function loginPost(req, res) {
 
         // enviar os dados pro servidor pra quando o cadastro der certo
         await db.query('INSERT INTO usersLogged (name,email,token) VALUES ($1, $2, $3)', [emailExistsQuery.rows[0].name, email, token]);
-        return res.status(200).send({token});
+        return res.status(200).send({ token });
 
     } catch (erro) {
         res.status(500).send(erro.message);
     }
 };
 
+// essa função aqui serve pra pegar as postagem que foi o usuario que fez users/me
+export async function userMeGet(req, res) {
 
+    
+
+    try {
+
+        
+        return res.status(200).send();
+
+    } catch (erro) {
+        res.status(500).send(erro.message);
+    }
+};
 
 
 
