@@ -102,18 +102,19 @@ export async function loginPost(req, res) {
 
 // essa função aqui serve pra pegar as postagem que foi o usuario que fez users/me
 export async function userMeGet(req, res) {
-    // Pegando os dados do token
+
+    // pegando os dados do token
     const { authorization } = req.headers;
     const token = authorization?.replace("Bearer ", "");
 
     try {
-        // Validando o token
+        // validando o token
         const userLogged = await db.query('SELECT * FROM userslogged WHERE token = $1;', [token]);
         if (userLogged.rows.length === 0) {
             return res.status(401).send({ message: "Usuário não autorizado." });
         };
 
-        // Buscando os dados do usuário e suas URLs encurtadas com a contagem total de visitas
+        // pegando os dados do usuário e suas urls somando o total de visitas e juntando tudo
         const userData = await db.query(`
                 SELECT
                 userslogged.id AS id,
@@ -131,13 +132,7 @@ export async function userMeGet(req, res) {
                 GROUP BY userslogged.id;
             `, [token]);
 
-        console.log(userData.rows)
-        // Verificar se o usuário foi encontrado
-        if (userData.rows.length === 0) {
-            return res.status(404).send({ message: "Usuário não encontrado." });
-        }
-
-        // Retornar os dados do usuário no formato especificado
+        // retornar os dados do usuário no formato especificado
         const { id, name, visitcount, shortenedurls } = userData.rows[0];
         const response = {
             id: id,
@@ -146,7 +141,7 @@ export async function userMeGet(req, res) {
             shortenedUrls: shortenedurls,
         };
 
-        return res.status(200).send(userData.rows);
+        return res.status(200).send(userData);
 
     } catch (error) {
         res.status(500).send(error.message);
