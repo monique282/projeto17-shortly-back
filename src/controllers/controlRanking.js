@@ -8,16 +8,8 @@ import { db } from '../database/database.connection.js';
 // essa função aqui serve pra pegar as postagem que foi o usuario que fez users/me
 export async function rankingGet(req, res) {
 
-    // pegando os dados do token
-    const { authorization } = req.headers;
-    const token = authorization?.replace("Bearer ", "");
-
     try {
-        // validando o token
-        const userLogged = await db.query('SELECT * FROM userslogged WHERE token = $1;', [token]);
-        if (userLogged.rows.length === 0) {
-            return res.status(401).send({ message: "Usuário não autorizado." });
-        };
+        
 
         // pegando os dados do usuário e suas urls somando o total de visitas e juntando tudo
         const userData = await db.query(`
