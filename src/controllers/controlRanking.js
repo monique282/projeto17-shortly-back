@@ -1,11 +1,9 @@
 // esse arquivo aqui serve para executar todas as funções que eu preciso
 // esse arquivo é chamado la em Routes
-// esse arquivo aqui é enviado por um post para faser o cadastro
 
 import { db } from '../database/database.connection.js';
 
-
-// essa função aqui serve pra pegar as postagem que foi o usuario que fez users/me
+// essa função aqui serve pra pegar mostrar o rank os 10 mais acessados
 export async function rankingGet(req, res) {
 
     try {
@@ -26,12 +24,11 @@ export async function rankingGet(req, res) {
             ;`);
 
         // retornar os dados do usuário no formato especificado
-
         return res.status(200).send(ranking.rows);
 
     } catch (error) {
         res.status(500).send(error.message);
-    }
+    };
 };
 
 
