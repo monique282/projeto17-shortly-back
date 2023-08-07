@@ -1,5 +1,6 @@
 import { nanoid } from 'nanoid';
 import { db } from '../database/database.connection.js';
+import { postRequisitionUrlsIdTableUsers } from '../repository/repositoryUrls.js';
 
 
 // função que para cadastrar uma url a encurtando, urls/short
@@ -21,7 +22,7 @@ export async function urlsPost(req, res) {
         };
 
         // quero o id da tabela de usuarios 
-        const idUser = await db.query('SELECT * FROM users WHERE email = $1;', [userLogeed.rows[0].email]);
+        const idUser = await postRequisitionUrlsIdTableUsers(userLogeed.rows[0].email);
 
         // gera a short URL utilizando o nanoid
         const shortUrl = nanoid(8);
