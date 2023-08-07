@@ -105,7 +105,7 @@ export async function userMeGet(req, res) {
 
     try {
         // validando o token
-        const userLogged = await (token);
+        const userLogged = await getRequisitionUserMeValidationToken(token);
         if (userLogged.rows.length === 0) {
             return res.status(401).send({ message: "Usuário não autorizado." });
         };
