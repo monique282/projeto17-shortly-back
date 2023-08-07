@@ -5,6 +5,7 @@
 
 import bcrypt from 'bcrypt';
 import { v4 as uuid } from 'uuid';
+import { postRequisitionRegister, postRequisitionRegisterSend } from '../repository/repositoryUsers.js';
 
 // essa função aqui serve para enviar um post para criar um cadastro
 export async function registerPost(req, res) {
@@ -15,9 +16,7 @@ export async function registerPost(req, res) {
     try {
 
         // verificando se o email ja esta cadastrado
-        const emailExistsQuery = 'SELECT * FROM users WHERE email = $1';
-        const emailExistsParams = [email];
-        const existingUser = await db.query(emailExistsQuery, emailExistsParams);
+        const existingUser = await postRequisitionRegister(email);
 
         if (existingUser.rows.length > 0) {
             return res.status(409).send({ message: "E-mail já cadastrado. Por favor, utilize outro e-mail." });
@@ -57,7 +56,7 @@ export async function registerPost(req, res) {
         };
 
         // enviar os dados pro servidor pra quando o cadastro der certo
-        await db.query(query, queryParams);
+        await postRequisitionRegisterSend(query, queryParams);
         return res.sendStatus(201);
 
     } catch (erro) {
