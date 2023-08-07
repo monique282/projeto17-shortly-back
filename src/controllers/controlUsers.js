@@ -5,7 +5,7 @@
 
 import bcrypt from 'bcrypt';
 import { v4 as uuid } from 'uuid';
-import { getRequisitionUserMeValidationToken, postRequisitionLogin, postRequisitionLoginSend, postRequisitionRegister, postRequisitionRegisterSend } from '../repository/repositoryUsers.js';
+import { getRequisitionUserMe, getRequisitionUserMeValidationToken, postRequisitionLogin, postRequisitionLoginSend, postRequisitionRegister, postRequisitionRegisterSend } from '../repository/repositoryUsers.js';
 
 // essa função aqui serve para enviar um post para criar um cadastro
 export async function registerPost(req, res) {
@@ -105,7 +105,7 @@ export async function userMeGet(req, res) {
 
     try {
         // validando o token
-        const userLogged = await getRequisitionUserMeValidationToken(token);
+        const userLogged = await getRequisitionUserMe(token);
         if (userLogged.rows.length === 0) {
             return res.status(401).send({ message: "Usuário não autorizado." });
         };
