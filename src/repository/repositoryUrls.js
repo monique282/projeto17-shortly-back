@@ -49,3 +49,8 @@ export async function deleteSendShortuserId(id) {
     const serveSend = await db.query(`DELETE FROM shortuser WHERE "shortId" = $1;`, [id]);
     return serveSend;
 };
+
+export async function deleteSendUrlsId(id) {
+    const serveSend = await db.query(`DELETE FROM urls WHERE id = $1;`, [id]);
+    return serveSend;
+};

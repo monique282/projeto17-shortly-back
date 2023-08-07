@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid';
 import { db } from '../database/database.connection.js';
-import { deleteRequisitionShortuserLink, deleteRequisitionUrlsId, deleteSendShortuserId, getRequisitionUrlsId, getSendUrlsOpenUpdatVistirCount, postRequisitionUrlsIdTableUrls, postRequisitionUrlsIdTableUsers, postRequisitionValidateToken, postSendUrlsIdTableShortuser, postSendUrlsIdTableUsers } from '../repository/repositoryUrls.js';
+import { deleteRequisitionShortuserLink, deleteRequisitionUrlsId, deleteSendShortuserId, deleteSendUrlsId, getRequisitionUrlsId, getSendUrlsOpenUpdatVistirCount, postRequisitionUrlsIdTableUrls, postRequisitionUrlsIdTableUsers, postRequisitionValidateToken, postSendUrlsIdTableShortuser, postSendUrlsIdTableUsers } from '../repository/repositoryUrls.js';
 
 
 // função que para cadastrar uma url a encurtando, urls/short
@@ -126,7 +126,7 @@ export async function urlsDelete(req, res) {
 
         // fazendo a requisição para deletar a urls 
         await deleteSendShortuserId(`DELETE FROM shortuser WHERE "shortId" = $1;`, [id]);
-        await db.query(`DELETE FROM urls WHERE id = $1;`, [id]);
+        await deleteSendUrlsId(id);
 
         // se tudo der certo
         res.sendStatus(204);
