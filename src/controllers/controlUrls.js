@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid';
 import { db } from '../database/database.connection.js';
-import { postRequisitionUrlsIdTableUrls, postRequisitionUrlsIdTableUsers, postRequisitionValidateToken, postSendUrlsIdTableShortuser, postSendUrlsIdTableUsers } from '../repository/repositoryUrls.js';
+import { getRequisitionUrlsId, postRequisitionUrlsIdTableUrls, postRequisitionUrlsIdTableUsers, postRequisitionValidateToken, postSendUrlsIdTableShortuser, postSendUrlsIdTableUsers } from '../repository/repositoryUrls.js';
 
 
 // função que para cadastrar uma url a encurtando, urls/short
@@ -49,7 +49,7 @@ export async function urlsGet(req, res) {
     try {
 
         // pegando a url peli id indicado
-        const urls = await db.query('SELECT * FROM urls WHERE id = $1;', [id]);
+        const urls = await getRequisitionUrlsId(id);
 
         // verificando se a ulr é valida
         if (urls.rows.length === 0) {
