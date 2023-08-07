@@ -4,7 +4,6 @@
 
 
 import bcrypt from 'bcrypt';
-import { db } from '../database/database.connection.js';
 import { v4 as uuid } from 'uuid';
 
 // essa função aqui serve para enviar um post para criar um cadastro
