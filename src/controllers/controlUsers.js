@@ -5,7 +5,8 @@
 
 import bcrypt from 'bcrypt';
 import { v4 as uuid } from 'uuid';
-import { postRequisitionRegister, postRequisitionRegisterSend } from '../repository/repositoryUsers.js';
+import { db } from '../database/database.connection.js';
+import { postRequisitionLogin, postRequisitionLoginSend, postRequisitionRegister, postRequisitionRegisterSend } from '../repository/repositoryUsers.js';
 
 // essa função aqui serve para enviar um post para criar um cadastro
 export async function registerPost(req, res) {
@@ -73,7 +74,7 @@ export async function loginPost(req, res) {
     try {
 
         // verificando se o email ja esta cadastrado
-        const emailExistsQuery = await db.query('SELECT * FROM users WHERE email = $1;', [email]);
+        const emailExistsQuery = await postRequisitionLogin(email);
         if (emailExistsQuery.rows.length === 0) {
             return res.status(401).send({ message: "E-mail não cadastrado. Por favor, utilize um e-mail valido, ou faça o cadastro." });
         }
@@ -88,7 +89,7 @@ export async function loginPost(req, res) {
         const token = uuid();
 
         // enviar os dados pro servidor pra quando o cadastro der certo
-        await db.query('INSERT INTO usersLogged (name,email,token) VALUES ($1, $2, $3)', [emailExistsQuery.rows[0].name, email, token]);
+        await postRequisitionLoginSend(emailExistsQuery.rows[0].name, email, token);
         return res.status(200).send({ token });
 
     } catch (erro) {
