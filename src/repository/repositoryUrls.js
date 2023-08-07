@@ -39,3 +39,9 @@ export async function deleteRequisitionUrlsId(id) {
     const usersResult = await db.query('SELECT * FROM users WHERE id = $1;', [id]);
     return usersResult;
 };
+
+export async function deleteRequisitionShortuserLink(user, id) {
+    const shortUrlResult = await db.query(`SELECT * FROM shortuser WHERE "userId" = $1 AND "shortId" = $2;`, [user, id]);
+    return shortUrlResult;
+};
+

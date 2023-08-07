@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid';
 import { db } from '../database/database.connection.js';
-import { deleteRequisitionUrlsId, getRequisitionUrlsId, getSendUrlsOpenUpdatVistirCount, postRequisitionUrlsIdTableUrls, postRequisitionUrlsIdTableUsers, postRequisitionValidateToken, postSendUrlsIdTableShortuser, postSendUrlsIdTableUsers } from '../repository/repositoryUrls.js';
+import { deleteRequisitionShortuserLink, deleteRequisitionUrlsId, getRequisitionUrlsId, getSendUrlsOpenUpdatVistirCount, postRequisitionUrlsIdTableUrls, postRequisitionUrlsIdTableUsers, postRequisitionValidateToken, postSendUrlsIdTableShortuser, postSendUrlsIdTableUsers } from '../repository/repositoryUrls.js';
 
 
 // função que para cadastrar uma url a encurtando, urls/short
@@ -114,10 +114,10 @@ export async function urlsDelete(req, res) {
         };
 
         // pegando o usuario que é o mesmo que o usuario logado usando o email como parametro
-        const user = await db.query(`SELECT * FROM users WHERE email = $1;`, [userLogeed.rows[0].email]);
+        const user = await postRequisitionUrlsIdTableUsers(userLogeed.rows[0].email);
 
         // verificando se a pessoa que quer apagar é a dona do link
-        const shortUrl = await db.query(`SELECT * FROM shortuser WHERE "userId" = $1 AND "shortId" = $2;`, [user.rows[0].id, id]);
+        const shortUrl = await deleteRequisitionShortuserLink(user.rows[0].id, id);
 
         // se não for
         if (shortUrl.rows.length === 0) {
