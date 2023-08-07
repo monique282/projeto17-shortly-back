@@ -1,5 +1,10 @@
 import { db } from '../database/database.connection.js';
 
+export async function postRequisitionValidateToken(token) {
+    const userLogeedResult = await db.query('SELECT * FROM userslogged WHERE token = $1;', [token]);
+    return userLogeedResult;
+};
+
 export async function postRequisitionUrlsIdTableUsers(email) {
     const idUserResult = await db.query('SELECT * FROM users WHERE email = $1;', [email]);
     return idUserResult;
