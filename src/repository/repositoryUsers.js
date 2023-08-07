@@ -19,3 +19,8 @@ export async function postRequisitionLoginSend(name, email, token) {
     const existingUserResultSend = await db.query('INSERT INTO usersLogged (name,email,token) VALUES ($1, $2, $3)', [name, email, token]);
     return existingUserResultSend;
 };
+
+export async function getRequisitionUserMe(token) {
+    const userLoggedResult = await db.query('SELECT * FROM userslogged WHERE token = $1;', [token]);
+    return userLoggedResult;
+};
