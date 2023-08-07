@@ -19,3 +19,8 @@ export async function postRequisitionUrlsIdTableUrls(shortUrl) {
     const idUrlsResult = await db.query('SELECT * FROM urls WHERE "shortUrl" = $1;', [shortUrl]);
     return idUrlsResult;
 };
+
+export async function postSendUrlsIdTableShortuser(idUser, idUrls) {
+    const serveSend = await db.query('INSERT INTO shortuser ( "userId" ,"shortId") VALUES ($1, $2)', [idUser, idUrls]);
+    return serveSend;
+};
