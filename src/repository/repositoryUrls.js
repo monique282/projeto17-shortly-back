@@ -45,3 +45,7 @@ export async function deleteRequisitionShortuserLink(user, id) {
     return shortUrlResult;
 };
 
+export async function deleteSendShortuserId(id) {
+    const serveSend = await db.query(`DELETE FROM shortuser WHERE "shortId" = $1;`, [id]);
+    return serveSend;
+};
