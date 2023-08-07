@@ -29,3 +29,8 @@ export async function getRequisitionUrlsId(id) {
     const urlsResult = await db.query('SELECT * FROM urls WHERE id = $1;', [id]);
     return urlsResult;
 };
+
+export async function getSendUrlsOpenUpdatVistirCount(visitCount, shortUrl) {
+    const serveSend = await db.query(`UPDATE urls SET "visitCount" = $1 WHERE "shortUrl" = $2`, [visitCount + 1, shortUrl])
+    return serveSend;
+};

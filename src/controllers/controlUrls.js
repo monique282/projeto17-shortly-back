@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid';
 import { db } from '../database/database.connection.js';
-import { getRequisitionUrlsId, postRequisitionUrlsIdTableUrls, postRequisitionUrlsIdTableUsers, postRequisitionValidateToken, postSendUrlsIdTableShortuser, postSendUrlsIdTableUsers } from '../repository/repositoryUrls.js';
+import { getRequisitionUrlsId, getSendUrlsOpenUpdatVistirCount, postRequisitionUrlsIdTableUrls, postRequisitionUrlsIdTableUsers, postRequisitionValidateToken, postSendUrlsIdTableShortuser, postSendUrlsIdTableUsers } from '../repository/repositoryUrls.js';
 
 
 // função que para cadastrar uma url a encurtando, urls/short
@@ -70,7 +70,7 @@ export async function urlsOpenGet(req, res) {
     try {
 
         // verificando se o short existe 
-        const shortForUrl = await db.query('SELECT * FROM urls WHERE "shortUrl" = $1;', [shortUrl]);
+        const shortForUrl = await postRequisitionUrlsIdTableUrls(shortUrl);
 
         // verificando se a short é valida
         if (shortForUrl.rows.length === 0) {
@@ -79,7 +79,7 @@ export async function urlsOpenGet(req, res) {
 
         // se tudo der certo
         // atualizando visitCount
-        await db.query(`UPDATE urls SET "visitCount" = $1 WHERE "shortUrl" = $2`, [shortForUrl.rows[0].visitCount + 1, shortUrl])
+        await getSendUrlsOpenUpdatVistirCount(shortForUrl.rows[0].visitCount + 1, shortUrl)
         res.redirect(shortForUrl.rows[0].url);
 
     } catch (erro) {
