@@ -6,7 +6,7 @@
 import bcrypt from 'bcrypt';
 import { v4 as uuid } from 'uuid';
 import { db } from '../database/database.connection.js';
-import { postRequisitionLogin, postRequisitionLoginSend, postRequisitionRegister, postRequisitionRegisterSend } from '../repository/repositoryUsers.js';
+import { getRequisitionUserMeValidationToken, postRequisitionLogin, postRequisitionLoginSend, postRequisitionRegister, postRequisitionRegisterSend } from '../repository/repositoryUsers.js';
 
 // essa função aqui serve para enviar um post para criar um cadastro
 export async function registerPost(req, res) {
@@ -106,29 +106,13 @@ export async function userMeGet(req, res) {
 
     try {
         // validando o token
-        const userLogged = await db.query('SELECT * FROM userslogged WHERE token = $1;', [token]);
+        const userLogged = await (token);
         if (userLogged.rows.length === 0) {
             return res.status(401).send({ message: "Usuário não autorizado." });
         };
 
         // pegando os dados do usuário e suas urls somando o total de visitas e juntando tudo
-        const userData = await db.query(`
-                SELECT
-                users.id AS id,
-                users.name As name,
-                CAST(SUM(urls."visitCount") AS INTEGER) AS "visitCount",
-                json_agg(json_build_object(
-                    'id', urls.id,
-                    'shortUrl', urls."shortUrl",
-                    'url', urls.url,
-                    'visitCount', urls."visitCount"
-                )) AS "shortenedUrls"
-                FROM users
-                JOIN shortuser ON shortuser."userId" = users.id
-                JOIN urls ON shortuser."shortId" = urls.id
-                WHERE users.email = $1
-                GROUP BY users.id, users.name;
-            `, [userLogged.rows[0].email]);
+        const userData = await getRequisitionUserMeValidationToken(userLogged.rows[0].email);
 
         // se de tudo certo
         return res.status(200).send(userData.rows[0]);
