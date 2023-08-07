@@ -79,7 +79,7 @@ export async function urlsOpenGet(req, res) {
         // se tudo der certo
         // atualizando visitCount
         await db.query(`UPDATE urls SET "visitCount" = $1 WHERE "shortUrl" = $2`, [shortForUrl.rows[0].visitCount + 1, shortUrl])
-        res.redirect(`/urls/open/${shortForUrl.rows[0].url}`);
+        res.redirect(shortForUrl.rows[0].url);
 
     } catch (erro) {
         res.status(500).send(erro.message);
