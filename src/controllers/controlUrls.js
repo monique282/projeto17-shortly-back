@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid';
 import { db } from '../database/database.connection.js';
-import { postRequisitionUrlsIdTableUsers } from '../repository/repositoryUrls.js';
+import { postRequisitionUrlsIdTableUsers, postSendUrlsIdTableUsers } from '../repository/repositoryUrls.js';
 
 
 // função que para cadastrar uma url a encurtando, urls/short
@@ -28,7 +28,7 @@ export async function urlsPost(req, res) {
         const shortUrl = nanoid(8);
 
         // enviando os dados para o servidor
-        await db.query('INSERT INTO urls ("shortUrl",url) VALUES ($1, $2)', [shortUrl, url]);
+        await postSendUrlsIdTableUsers(shortUrl, url);
 
         // quero o id da tabela de urls 
         const idUrls = await db.query('SELECT * FROM urls WHERE "shortUrl" = $1;', [shortUrl]);
