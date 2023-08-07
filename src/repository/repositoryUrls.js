@@ -34,3 +34,8 @@ export async function getSendUrlsOpenUpdatVistirCount(visitCount, shortUrl) {
     const serveSend = await db.query(`UPDATE urls SET "visitCount" = $1 WHERE "shortUrl" = $2`, [visitCount + 1, shortUrl])
     return serveSend;
 };
+
+export async function deleteRequisitionUrlsId(id) {
+    const usersResult = await db.query('SELECT * FROM users WHERE id = $1;', [id]);
+    return usersResult;
+};
